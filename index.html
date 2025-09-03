@@ -1,48 +1,96 @@
-import { useState } from "react"; import { Card, CardContent } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import { Input } from "@/components/ui/input"; import { motion } from "framer-motion";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superbikes Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+  <h1 class="text-3xl font-bold mb-6">🏍️ Superbikes Dashboard</h1>
 
-const superbikes = [ { id: 1, name: "Ducati Panigale V4", price: "$28,000", image: "https://images.unsplash.com/photo-1606811841689-94f76a1e1b8f", engine: "1103cc", power: "214 hp", }, { id: 2, name: "BMW S1000RR", price: "$25,500", image: "https://images.unsplash.com/photo-1606813902768-6b6a7e9c2f16", engine: "999cc", power: "205 hp", }, { id: 3, name: "Kawasaki Ninja H2R", price: "$56,000", image: "https://images.unsplash.com/photo-1606811835022-4e35c6e6b7f5", engine: "998cc", power: "310 hp", }, { id: 4, name: "Yamaha R1M", price: "$26,000", image: "https://images.unsplash.com/photo-1598133894001-d8c1cb92a4a4", engine: "998cc", power: "200 hp", }, ];
-
-export default function Dashboard() { const [query, setQuery] = useState("");
-
-const filteredBikes = superbikes.filter((bike) => bike.name.toLowerCase().includes(query.toLowerCase()) );
-
-return ( <div className="p-8 min-h-screen bg-gray-100"> <h1 className="text-3xl font-bold mb-6">🏍️ Superbikes Dashboard</h1>
-
-<div className="mb-6 max-w-md">
-    <Input
-      type="text"
-      placeholder="Search bikes..."
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
+  <!-- Search bar -->
+  <div class="mb-6 max-w-md">
+    <input 
+      id="search"
+      type="text" 
+      placeholder="Search bikes..." 
+      class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
     />
   </div>
 
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {filteredBikes.map((bike) => (
-      <motion.div
-        key={bike.id}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <Card className="rounded-2xl shadow-lg overflow-hidden">
-          <img
-            src={bike.image}
-            alt={bike.name}
-            className="h-48 w-full object-cover"
-          />
-          <CardContent className="p-4">
-            <h2 className="text-xl font-semibold mb-2">{bike.name}</h2>
-            <p className="text-gray-600 mb-1">Engine: {bike.engine}</p>
-            <p className="text-gray-600 mb-1">Power: {bike.power}</p>
-            <p className="text-lg font-bold mb-3">{bike.price}</p>
-            <Button className="w-full">View Details</Button>
-          </CardContent>
-        </Card>
-      </motion.div>
-    ))}
+  <!-- Bikes grid -->
+  <div id="bikesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Bike cards will be inserted here -->
   </div>
-</div>
 
-); }
+  <script>
+    const superbikes = [
+      {
+        id: 1,
+        name: "Ducati Panigale V4",
+        price: "$28,000",
+        image: "https://images.unsplash.com/photo-1606811841689-94f76a1e1b8f",
+        engine: "1103cc",
+        power: "214 hp",
+      },
+      {
+        id: 2,
+        name: "BMW S1000RR",
+        price: "$25,500",
+        image: "https://images.unsplash.com/photo-1606813902768-6b6a7e9c2f16",
+        engine: "999cc",
+        power: "205 hp",
+      },
+      {
+        id: 3,
+        name: "Kawasaki Ninja H2R",
+        price: "$56,000",
+        image: "https://images.unsplash.com/photo-1606811835022-4e35c6e6b7f5",
+        engine: "998cc",
+        power: "310 hp",
+      },
+      {
+        id: 4,
+        name: "Yamaha R1M",
+        price: "$26,000",
+        image: "https://images.unsplash.com/photo-1598133894001-d8c1cb92a4a4",
+        engine: "998cc",
+        power: "200 hp",
+      },
+    ];
 
+    const bikesGrid = document.getElementById("bikesGrid");
+    const searchInput = document.getElementById("search");
+
+    function renderBikes(query = "") {
+      bikesGrid.innerHTML = "";
+      const filtered = superbikes.filter(bike =>
+        bike.name.toLowerCase().includes(query.toLowerCase())
+      );
+
+      filtered.forEach(bike => {
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-transform";
+        card.innerHTML = `
+          <img src="${bike.image}" alt="${bike.name}" class="h-48 w-full object-cover" />
+          <div class="p-4">
+            <h2 class="text-xl font-semibold mb-2">${bike.name}</h2>
+            <p class="text-gray-600 mb-1">Engine: ${bike.engine}</p>
+            <p class="text-gray-600 mb-1">Power: ${bike.power}</p>
+            <p class="text-lg font-bold mb-3">${bike.price}</p>
+            <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">View Details</button>
+          </div>
+        `;
+        bikesGrid.appendChild(card);
+      });
+    }
+
+    renderBikes();
+
+    searchInput.addEventListener("input", (e) => {
+      renderBikes(e.target.value);
+    });
+  </script>
+</body>
+</html>
